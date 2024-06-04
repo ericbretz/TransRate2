@@ -363,7 +363,7 @@ class Assembly:
         return contig_score * (self.good_mappings / self.fragments)
     
     def geomean(self, x):
-        return math.exp(sum([math.log(v) if v != 0 else math.log(0.01) for v in x]) / len(x))
+        return math.exp(sum([math.log(max(v, 0.01)) for v in x]) / len(x))
     
     def harmmean(self, x):
         return len(x) / sum([1.0 / v if v != 0 else 1.0 / 0.01 for v in x])

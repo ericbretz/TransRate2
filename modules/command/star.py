@@ -74,14 +74,15 @@ class STAR:
             star_cmd.extend(['--outSAMtype BAM Unsorted'])
 
         star_run = subprocess.Popen(star_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, shell=False)
+        # star_run = subprocess.Popen(star_cmd, preexec_fn=os.setsid, shell=True)
         stdout, stderr = star_run.communicate()
         returncode = star_run.returncode
 
-        # Logging Exit
+        #Logging Exit
         main.LOG.log_time(main, 'star', 'end')
         main.LOG.log_write(main, stdout, stderr)
 
-        # Error Handling
+        #Error Handling
         if star_run.returncode != 0:
             main.ERROR = True
 
@@ -93,7 +94,7 @@ class STAR:
             print('\n')
             print('STAR Failed')
             print(f'Check Logs at {main.LOG_PATH}')
-            print(stderr.decode('utf-8'))
+            # print(stderr.decode('utf-8'))
 
             sys.exit(1)
 

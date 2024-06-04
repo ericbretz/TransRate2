@@ -1,6 +1,7 @@
 import time
 import os
 import subprocess
+import pysam
 import sys
 import threading
 import pandas as pd
@@ -29,8 +30,6 @@ class MAIN:
         self.QUIET          = False # Suppress all messages
         self.SKIP           = False # Skip to TransRate
         self.THREADS        = 1     # Number of threads to use
-        self.BAM            = False # Run BAM file
-        self.BAM_FILE       = None  # Path to BAM file
 
         #### Analyses ####
         self.PLOT           = False # Run Plot

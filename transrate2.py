@@ -23,7 +23,6 @@ if __name__ == "__main__":
             self.skip        = False
             self.plot        = False
             self.clutter     = False
-            self.bam         = False
             self.threads     = 1
 
             #### Args ####
@@ -92,7 +91,6 @@ if __name__ == "__main__":
             # --left, -l: Left reads file                           #
             # --right, -r: Right reads file                         #
             # --reference, -f: Reference file                       #
-            # --bam, -m: Bam file                                   #
             # --output, -o: Output directory                        #
             # --threads, -t: Number of threads                      #
             # --star, -s: Use STAR aligner (default)                #
@@ -111,7 +109,6 @@ if __name__ == "__main__":
             parser.add_argument('--left', '-l', type=str , help='Left reads file')
             parser.add_argument('--right', '-r', type=str , help='Right reads file')
             parser.add_argument('--reference', '-f', type=str , help='Reference file')
-            parser.add_argument('--bam', '-m', type=str , help='Bam file')
             parser.add_argument('--output', '-o', type=str , help='Output directory')
             parser.add_argument('--threads', '-t', type=int , help='Number of threads')
             parser.add_argument('--star', '-s', action='store_true', default=False, help='Use STAR aligner (default)')
@@ -193,7 +190,7 @@ if __name__ == "__main__":
 
         # Check for valid paths
         def path_check(self):
-            path  = PathCheck(self.assembly_list, self.args.left, self.args.right, self.args.output, self.args.reference, self.args.bam)
+            path  = PathCheck(self.assembly_list, self.args.left, self.args.right, self.args.output, self.args.reference, self.args)
             error = path.check()
             if error:
                 error = f'...{error[-61:]}' if len(error) > 64 else error
@@ -275,8 +272,6 @@ if __name__ == "__main__":
                 t2.CLUTTER        = self.clutter
                 t2.THREADS        = self.threads
                 t2.COLOR          = self.color
-                t2.BAM_FILE       = self.bam
-                t2.BAM            = True if self.args.bam else False
 
                 #### Analyses ####
                 # Assembly

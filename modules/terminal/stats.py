@@ -67,6 +67,9 @@ class Stats:
                         'p_contigs_lowcovered': 'p̂ Contigs Lowcovered',
                         'contigs_segmented'   : '# Contigs Segmented',
                         'p_contigs_segmented' : 'p̂ Contigs Segmented',
+                        'softclipped'         : '# Softclipped',
+                        'p_softclipped'       : 'p̂ Softclipped',
+                        'p_softclipped_length': 'p̂ Softclipped Length',
                         }
             print(readmaplabel) # Print top label bar
             for k,v in self.assemblies.items(): # Print each read mapping metric
@@ -91,6 +94,8 @@ class Stats:
                 print(scorelabel) # Print top label bar
                 for k,v in self.assemblies.items(): # Print each score metric
                     try:
+                        if type(v[0]) == float:
+                            v[0] = f'{v[0]:.4f}'
                         if 'p̂' in k or 'p̂' in score[k]:
                             print(f' {main.COLOR}  •\033[m {score[k]:<23}: {v[0]}')
                         else:
@@ -111,8 +116,8 @@ class Stats:
                 'scord_g': ['Avg. sCord',       self.assemblies['sCord_Geometric'].values[0]],
                 'scseg_g': ['Avg. sCseg',       self.assemblies['sCseg_Geometric'].values[0]],
             } if main.READMODE == 2 else {
-                'score_h' : ['Harmonic Score',  self.assemblies['harmonic_score'].values[0]],
-                'score_g' : ['Geometric Score', self.assemblies['geometric_score'].values[0]],
+                # 'score_h' : ['Harmonic Score',  self.assemblies['harmonic_score'].values[0]],
+                # 'score_g' : ['Geometric Score', self.assemblies['geometric_score'].values[0]],
                 'scnuc_h' : ['Avg. sCnuc',      self.assemblies['sCnuc_Harmonic'].values[0]],
                 'sccov_h' : ['Avg. sCcov',      self.assemblies['sCcov_Harmonic'].values[0]],
                 'scnuc_g' : ['Avg. sCnuc',      self.assemblies['sCnuc_Geometric'].values[0]],
@@ -138,7 +143,6 @@ class Stats:
         def ref_stats(self, main):
             reflabel = f'{main.COLOR}  ┌{"─" * 25}\033[m  Reference Statistics  {main.COLOR}{"─" * 25}┐\033[m'
             clear = ' ' * 80
-            print(clear)
             assemblies = pd.read_csv(main.ASSEMBLY_FILE).to_dict()
 
             refs = {
@@ -163,6 +167,8 @@ class Stats:
             print(reflabel) # Print top label bar
             for k,v in self.assemblies.items(): # Print each reference metric
                 try:
+                    if type(v[0]) == float:
+                        v[0] = f'{v[0]:.4f}'
                     if 'p̂' in k or 'p̂' in refs[k]:
                         print(f' {main.COLOR}  •\033[m {refs[k]:<23}: {v[0]}')
                     else:
