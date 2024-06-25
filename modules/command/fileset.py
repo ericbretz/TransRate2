@@ -59,8 +59,9 @@ class FileSet:
             if not os.path.exists(main.ALIGNER_INDEX):
                 os.makedirs(main.ALIGNER_INDEX)
         else:
-            print('No aligner specified')
-            sys.exit(1)
+            # print('No aligner specified')
+            # sys.exit(1)
+            main.LOG.error_out(main, 'Aligner', 'No aligner specified')
 
         main.SALMON_PATH  = os.path.join(main.OUTPUT, 'salmon_' + main.ASSEMBLY_NAME)
         main.SALMON_QUANT = os.path.join(main.SALMON_PATH, 'quant.sf')

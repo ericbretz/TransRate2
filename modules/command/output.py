@@ -46,7 +46,8 @@ class Output:
             if main.STAGE == 'Finished' and main.PRINTED:
                 sys.exit(0)
             if main.ERROR:
-                sys.exit(1)
+                # main.LOG.error_out(main, 'TransRate2', 'TransRate2 failed')
+                sys.exit()
             # elif main.STAGE == 'Finished' and not main.PRINTED:
             #     return
             while not main.STAGE:

@@ -15,7 +15,7 @@ def process_task(args):
 
     for ref in refs:
         uncovered = bamdct[ref]['coverage']['bases']
-        pnotseg = setPNotSegmented(len(uncovered), uncovered, 0.9)
+        pnotseg = setPNotSegmented(len(uncovered), uncovered, 0.1)
         tmp_dct[ref]['stats']['p_notsegmented'] = round(pnotseg, 4)
 
     return tmp_dct

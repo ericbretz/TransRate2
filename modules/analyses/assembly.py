@@ -111,6 +111,7 @@ class Assembly:
         self.p_contig_uncovbase   = 0
         self.score               = []
         self.goodcontig           = 0
+        self.badcontig            = 0
         self.goodcontiglist       = []
 
     def run(self):
@@ -159,7 +160,7 @@ class Assembly:
                             'contigs_uncovbase', 'p_contigs_uncovbase', 'contigs_uncovered', 
                             'p_contigs_uncovered', 'contigs_lowcovered', 'p_contigs_lowcovered', 
                             'contigs_segmented', 'p_contigs_segmented', 'geometric_score', 'harmonic_score', 'optimal_score', 
-                            'cutoff', 'weighted', 'goodcontig', 'sCnuc_Harmonic', 'sCcov_Harmonic',
+                            'cutoff', 'weighted', 'goodcontig', 'badcontig', 'sCnuc_Harmonic', 'sCcov_Harmonic',
                             'sCord_Harmonic', 'sCseg_Harmonic', 'sCnuc_Geometric', 'sCcov_Geometric',
                             'sCord_Geometric', 'sCseg_Geometric']
             
@@ -454,6 +455,8 @@ class Assembly:
             if self.CONTIG_DF.loc[index, 'score'] > self.optimal_score_val[1]:
                 self.goodcontig += 1
                 self.goodcontiglist.append(self.CONTIG_DF.loc[index, 'name'])
+            else:
+                self.badcontig += 1
         try:
             with open(os.path.join(self.OUTDIR, 'transrate', f'good.{self.assembly}.fa'), 'w') as good:
                 good.write('')
@@ -491,6 +494,8 @@ class Assembly:
 
         if 'goodcontig' in self.OUTPUT_DF.columns:
             self.OUTPUT_DF.loc[0, 'goodcontig'] = self.goodcontig
+        if 'badcontig' in self.OUTPUT_DF.columns:
+            self.OUTPUT_DF.loc[0, 'badcontig'] = self.badcontig
 
     def assembly_output(self):
         if 'assembly' in self.OUTPUT_DF.columns:

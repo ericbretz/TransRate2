@@ -38,7 +38,11 @@ class STAR:
                 bottom= f'\033[0;31m  └{"─" * 74}┘\033[m'
                 print(f'{top}\n{middle}\n{bottom}')
                 main.ERROR = True
-                sys.exit(1)
+                # sys.exit(1)
+                main.LOG.error_out(main, 'STAR Index', 'STAR Index Failed')
+            else:
+                # sys.exit(1)
+                main.LOG.error_out(main, 'STAR Index', 'STAR Index Failed')
 
         # Error Handling
         if star_index_run.returncode != 0:
@@ -49,11 +53,12 @@ class STAR:
             except:
                 pass
 
-            print('\n')
-            print('STAR Index Failed')
-            print(f'Check Logs at {self.LOGDIR}')
+            # print('\n')
+            # print('STAR Index Failed')
+            # print(f'Check Logs at {self.LOGDIR}')
 
-            sys.exit(1)
+            # sys.exit(1)
+            main.LOG.error_out(main, 'STAR Index', 'STAR Index Failed')
 
     def star(self, main):
         # Logging Entry
@@ -91,12 +96,13 @@ class STAR:
             except:
                 pass
 
-            print('\n')
-            print('STAR Failed')
-            print(f'Check Logs at {main.LOG_PATH}')
+            # print('\n')
+            # print('STAR Failed')
+            # print(f'Check Logs at {main.LOG_PATH}')
             # print(stderr.decode('utf-8'))
 
-            sys.exit(1)
+            # sys.exit(1)
+            main.LOG.error_out(main, 'STAR', 'STAR Failed')
 
         count_file = os.path.join(main.ALIGNER_PATH, main.ASSEMBLY_NAME + '_Log.final.out')
         with open(count_file, 'r') as f:
@@ -106,5 +112,6 @@ class STAR:
                     main.READ_COUNT = int(line.split('\t')[-1])
 
             if not main.READ_COUNT:
-                print('Error: Could not get read count from STAR output')
-                sys.exit(1)
+                # print('Error: Could not get read count from STAR output')
+                # sys.exit(1)
+                main.LOG.error_out(main, 'STAR', 'Could not get read count from STAR output')

@@ -26,17 +26,17 @@ class SNAP:
         # Error Handling
         if snap_index_run.returncode != 0:
             main.ERROR = True
+            # try:
+            #     main.OUT_THREAD.join()
+            # except:
+            #     pass
 
-            try:
-                main.OUT_THREAD.join()
-            except:
-                pass
+            # print('\n')
+            # print('Snap Index Failed')
+            # print(f'Check Logs at {main.LOG_PATH}')
 
-            print('\n')
-            print('Snap Index Failed')
-            print(f'Check Logs at {main.LOG_PATH}')
-
-            sys.exit(1)
+            # # sys.exit(1)
+            main.LOG.error_out(main, 'Snap Index', 'Snap Index Failed')
 
     def snap(self, main):
         # Logging Entry
@@ -65,19 +65,21 @@ class SNAP:
             else:
                 main.READ_COUNT = int(int(count[3].split(' ')[0].replace(',', '')) / 2)
         except:
-            raise Exception('Error: Snap failed to align reads')
+            # raise Exception('Error: Snap failed to align reads')
+            main.LOG.error_out(main, 'Snap', 'Snap failed to align reads')
         
         # Error Handling
         if snap_run.returncode != 0:
             main.ERROR = True
 
-            try:
-                main.OUT_THREAD.join()
-            except:
-                pass
+            # try:
+            #     main.OUT_THREAD.join()
+            # except:
+            #     pass
 
-            print('\n')
-            print('Snap Failed')
-            print(f'Check Logs at {main.LOG_PATH}')
+            # print('\n')
+            # print('Snap Failed')
+            # print(f'Check Logs at {main.LOG_PATH}')
 
-            sys.exit(1)
+            # # sys.exit(1)
+            main.LOG.error_out(main, 'Snap', 'Snap Failed')

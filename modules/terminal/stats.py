@@ -89,6 +89,7 @@ class Stats:
                         'cutoff'              : 'Cutoff',
                         'weighted'            : 'Weighted',
                         'goodcontig'          : 'Good Contig',
+                        'badcontig'           : 'Bad Contig',
             }
             if any(key in self.assemblies.keys() for key in score.keys()):
                 print(scorelabel) # Print top label bar

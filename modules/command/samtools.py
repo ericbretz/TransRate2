@@ -25,16 +25,17 @@ class Samtools:
         # Error Handling
         if samtools_sort_run.returncode != 0:
             main.ERROR = True
-            while not main.STOPPED:
-                pass
-            print('\n')
-            print('Samtools Sort Failed')
-            print(f'Check Logs at {main.LOG_PATH}')
-            try:
-                main.OUTPUTTHREAD.join()
-            except:
-                pass
-            sys.exit(1)
+            # while not main.STOPPED:
+            #     pass
+            # print('\n')
+            # print('Samtools Sort Failed')
+            # print(f'Check Logs at {main.LOG_PATH}')
+            # try:
+            #     main.OUTPUTTHREAD.join()
+            # except:
+            #     pass
+            # sys.exit(1)
+            main.LOG.error_out(main, 'Samtools Sort', 'Samtools Sort Failed')
 
     def samtools_index(self, main):
         # Logging Entry
@@ -53,16 +54,17 @@ class Samtools:
         # Error Handling
         if samtools_index_run.returncode != 0:
             main.ERROR = True
-            while not main.STOPPED:
-                pass
-            print('\n')
-            print('Samtools Index Failed')
-            print(f'Check Logs at {main.LOG_PATH}')
-            try:
-                main.OUTPUTTHREAD.join()
-            except:
-                pass
-            sys.exit(1)
+            # while not main.STOPPED:
+            #     pass
+            # print('\n')
+            # print('Samtools Index Failed')
+            # print(f'Check Logs at {main.LOG_PATH}')
+            # try:
+            #     main.OUTPUTTHREAD.join()
+            # except:
+            #     pass
+            # sys.exit(1)
+            main.LOG.error_out(main, 'Samtools Index', 'Samtools Index Failed')
     
         # if os.path.exists(os.path.join(main.BAM_SALMON.strip('.bam') + '.sorted.bam')):
         #     main.BAM_SORTED = main.BAM_SALMON + '.sorted.bam'

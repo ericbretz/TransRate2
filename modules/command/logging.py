@@ -1,5 +1,6 @@
 import os
 import time
+import sys
 
 class Logging:
     def __init__(self, main):
@@ -55,3 +56,15 @@ class Logging:
             stdout_f.write(stdout.decode('utf-8'))
         with open(self.STDERR, 'a') as stderr_f:
             stderr_f.write(stderr.decode('utf-8'))
+
+    def error_out(self, main, process, error):
+        red = '\033[91m'
+        reset = '\033[0m'
+        proc_len = len(process)
+
+        print(f'{red}  ┌{"─" * 29}{reset}{"Failed":^16}{red}{"─" * 29}┐{reset}')
+        print(f'{red}  │ {reset} There was an error running {red}{process}{" " * (45 - proc_len)}│{reset}')
+        print(f'{red}  └{"─" * 74}┘{reset}')
+        sys.exit(1)
+
+        

@@ -35,7 +35,8 @@ class BT2:
             print('Bowtie2 Index Failed')
             print(f'Check Logs at {self.LOGDIR}')
 
-            sys.exit(1)
+            # sys.exit(1)
+            main.LOG.error_out(main, 'Bowtie2 Index', 'Bowtie2 index failed')
 
     def bowtie2(self, main):
         # Logging Entry
@@ -62,8 +63,9 @@ class BT2:
 
         # Error Handling
         if not main.READ_COUNT:
-            print('Error: Could not get read count from Bowtie2 output')
-            sys.exit(1)
+            # print('Error: Could not get read count from Bowtie2 output')
+            # sys.exit(1)
+            main.LOG.error_out(main, 'Bowtie2', 'Could not get read count from Bowtie2 output')
 
         if bt2_run.returncode != 0:
             main.ERROR = True
@@ -77,7 +79,8 @@ class BT2:
             print('Bowtie2 Failed')
             print(f'Check Logs at {main.LOG_PATH}')
 
-            sys.exit(1)
+            # sys.exit(1)
+            main.LOG.error_out(main, 'Bowtie2', 'Bowtie2 failed')
 
         if os.path.exists(os.path.join(main.ALIGNER_PATH, main.ASSEMBLY_NAME + '.bam')):
             new_name = os.path.join(main.ALIGNER_PATH, main.ASSEMBLY_NAME + '.aligned.bam')

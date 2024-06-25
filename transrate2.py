@@ -199,6 +199,7 @@ if __name__ == "__main__":
                 print(f'{self.colors["red"]}  │ {self.reset} {error}{" " * (72 - len(error))}{self.colors["red"]}│{self.reset}')
                 print(f'{self.colors["red"]}  └{"─" * 74}┘{self.reset}')
                 sys.exit(1)
+
             # Check if single, paired, or solo
             if bool(self.args.left) != bool(self.args.right):
                 self.singleend = True

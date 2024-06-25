@@ -25,16 +25,17 @@ class Salmon:
         # Error Handling
         if salmon_run.returncode != 0:
             main.ERROR = True
-            while not main.STOPPED:
-                pass
-            print('\n')
-            print('Salmon Failed')
-            print(f'Check Logs at {main.LOG_PATH}')
-            try:
-                main.OUTPUTTHREAD.join()
-            except:
-                pass
-            sys.exit(1)
+            # while not main.STOPPED:
+            #     pass
+            # print('\n')
+            # print('Salmon Failed')
+            # print(f'Check Logs at {main.LOG_PATH}')
+            # try:
+            #     main.OUTPUTTHREAD.join()
+            # except:
+            #     pass
+            # # sys.exit(1)
+            main.LOG.error_out(main, 'Salmon', 'Salmon failed')
 
         if os.path.exists(os.path.join(main.SALMON_PATH, 'postSample.bam')):
             new_name = os.path.join(main.SALMON_PATH, f'{main.ASSEMBLY_NAME}.postSample.bam')

@@ -35,6 +35,7 @@ class plots:
             p9.xlab('Contig Score') +
             p9.ylab('Count') +
             p9.scale_x_continuous(breaks=[i/20 for i in range(21)], limits=[0, 1], minor_breaks=[i/100 for i in range(101)]) +
+            p9.scale_y_continuous(limits=[0, 4500], breaks=[i * 500 for i in range(10)]) +
             p9.geom_text(p9.aes(label='stat(count)'), stat='bin', bins=100, size=8, va='bottom', format_string=' {:.0f}', angle=90, boundary=0) +
             p9.theme_light() +
             p9.theme(axis_text_x=p9.element_text(rotation=45, hjust=1)))
@@ -134,7 +135,7 @@ class plots:
                 ['p_softclipped', 'p_fragments_mapped',
                  'p_bases_uncovered', 'p_contigs_uncovbase', 
                  'p_contigs_uncovered', 'p_contigs_lowcovered',
-                 'sCnuc_Harmonic', 'sCcov_Harmonic'
+                 'sCnuc_Harmonic', 'sCcov_Harmonic',
                  'sCnuc_Geometric', 'sCcov_Geometric']
 
         assembly_stats = self.assembly[stats]

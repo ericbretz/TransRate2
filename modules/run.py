@@ -215,9 +215,10 @@ class MAIN:
         
         else:
             self.OUT_THREAD.join()
-            print('\n')
-            print('Aligner not found')
-            sys.exit(1)
+            # print('\n')
+            # print('Aligner not found')
+            # sys.exit(3)
+            self.LOG.error_out(self, 'Aligner', 'Aligner not found')
 
     def salmon_run(self):
         salmon = Salmon(self)
