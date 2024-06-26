@@ -1,5 +1,5 @@
 import pysam
-from multiprocessing import Pool
+from multiprocessing import Pool, set_start_method
 import sys
 
 def process_task(args):
@@ -34,9 +34,14 @@ def process_task(args):
     return tmp_dct
 
 def frag(bamfile, bamdct, threads, single):
-
+    try:
+        set_start_method('spawn')
+    except:
+        pass
     with Pool(threads) as p:
         results = p.map(process_task, [[i, bamfile, threads, single] for i in range(threads)])
+
+    p.terminate()
 
     for result in results:
         for key in result:

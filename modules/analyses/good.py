@@ -1,6 +1,6 @@
 import math
 import pysam
-from multiprocessing import Pool
+from multiprocessing import Pool, set_start_method
 
 
 def process_task(args):
@@ -107,6 +107,10 @@ def good(bamfile, bamdct, threads, single):
         s = math.sqrt(s / (count - 1))
         realistic_distance = int((3 * s) + mean)
 
+        try:
+            set_start_method('spawn')
+        except:
+            pass
         with Pool(threads) as p:
             results = p.map(process_task, [[i, bamfile, threads, realistic_distance] for i in range(threads)])
 

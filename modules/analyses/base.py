@@ -1,6 +1,6 @@
 import numpy as np
 import pysam
-from multiprocessing import Pool
+from multiprocessing import Pool, set_start_method
 
 def process_task(args):
     split = args[0]
@@ -21,7 +21,10 @@ def process_task(args):
     return tmp_dct
 
 def base(bamfile, bamdct, threads, single):
-
+    try:
+        set_start_method('spawn')
+    except:
+        pass
     with Pool(threads) as p:
         results = p.map(process_task, [[i, bamfile, threads, bamdct] for i in range(threads)])
 

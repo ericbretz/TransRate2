@@ -5,7 +5,7 @@ y = str(date_time.year)
 
 __major__ = 2
 __minor__ = 1
-__patch__ = 3
+__patch__ = 4
 __dev__   = False
 __devV__  = 1
 __script_name__ = 'Transrate2'
