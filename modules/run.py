@@ -120,8 +120,8 @@ class MAIN:
                 self.salmon_run()
                 # Run Samtools
                 self.samtools_run()
-        # Run TransRate2
-        self.tr2_run()
+                # Run TransRate2
+                self.tr2_run()
         # Run Assembly Stats
         self.assembly_run()
         # Run Plot
