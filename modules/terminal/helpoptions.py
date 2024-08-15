@@ -48,6 +48,7 @@ class Help:
                 'Plot'            : ['--plot', '-P', 'Create .png plots of results'],
                 'Clutter'         : ['--clutter', '-c', 'Remove intermediate files'],
                 'Quiet'           : ['--quiet', '-q', 'Supress terminal output'],
+                'Fix'             : ['--fix', '-x', 'Fixes rare bug where Transrate2 hangs'],
                 'Help'            : ['--help', '-h', 'Display this help message'],
                 'Version'         : ['--version', '-v', 'Display version'],
             }}

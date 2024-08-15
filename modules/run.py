@@ -30,6 +30,7 @@ class MAIN:
         self.QUIET          = False # Suppress all messages
         self.SKIP           = False # Skip to TransRate
         self.THREADS        = 1     # Number of threads to use
+        self.FIX            = False # Fix rare bug where Transrate2 analysis hangs
 
         #### Analyses ####
         self.PLOT           = False # Run Plot
@@ -116,10 +117,19 @@ class MAIN:
             if self.READMODE != 0:
                 # Run aligner (STAR, SNAP, Bowtie2)
                 self.aligner_run()
+                if not os.path.exists(self.BAM_ALIGNER):
+                    self.LOG.error_out(self, self.ALIGNER, 'Aligner failed')
+                    sys.exit(1)
                 # Run salmon
                 self.salmon_run()
+                if not os.path.exists(self.BAM_SALMON) or not os.path.exists(self.SALMON_QUANT):
+                    self.LOG.error_out(self, 'Salmon', 'Salmon failed')
+                    sys.exit(1)
                 # Run Samtools
                 self.samtools_run()
+                if not os.path.exists(self.BAM_SORTED) or not os.path.exists(self.BAM_SORTED + '.bai'):
+                    self.LOG.error_out(self, 'Samtools', 'Samtools failed')
+                    sys.exit(1)
                 # Run TransRate2
                 self.tr2_run()
         # Run Assembly Stats

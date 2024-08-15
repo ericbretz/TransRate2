@@ -9,7 +9,6 @@ from modules.terminal.logo import Logo
 from modules.terminal.helpoptions import Help
 from modules.terminal.path import PathCheck
 
-
 if __name__ == "__main__":
     class Parser:
         def __init__(self):
@@ -120,6 +119,7 @@ if __name__ == "__main__":
             parser.add_argument('--plot', '-P', action='store_true', help='Create .png plots of results')
             parser.add_argument('--skip', '-k', action='store_true', help='Skip to transrate')
             parser.add_argument('--version', '-v', action='store_true', help='Display version')
+            parser.add_argument('--fix', '-x', action='store_true', help='Fix rare bug where Transrate2 analysis hangs')
 
             self.args = parser.parse_args()
 
@@ -229,18 +229,19 @@ if __name__ == "__main__":
             output = ''
 
             if self.singleend:
-                reads = f'...{"".join(os.path.basename(self.single)[-61:])}' if len(self.single) > 64 else os.path.basename(self.single)
+                reads = f'...{"".join(os.path.basename(self.single)[-56:])}' if len(self.single) > 59 else os.path.basename(self.single)
             elif not self.solo:
-                left = f'...{"".join(os.path.basename(self.args.left)[-61:])}' if len(self.args.left) > 64 else os.path.basename(self.args.left)
-                right = f'...{"".join(self.args.right[-61:])}' if len(self.args.right) > 64 else os.path.basename(self.args.right)
+                left = f'...{"".join(os.path.basename(self.args.left)[-56:])}' if len(self.args.left) > 59 else os.path.basename(self.args.left)
+                right = f'...{"".join(self.args.right[-56:])}' if len(self.args.right) > 59 else os.path.basename(self.args.right)
             if self.args.reference:
-                reference = f'...{"".join(os.path.basename(self.args.reference)[-61:])}' if len(self.args.reference) > 64 else os.path.basename(self.args.reference)
-            output  = f'...{"".join(self.args.output[-61:])}' if len(self.output) > 64 else self.output
+                reference = f'...{"".join(os.path.basename(self.args.reference)[-56:])}' if len(self.args.reference) > 59 else os.path.basename(self.args.reference)
+            output  = f'...{"".join(self.args.output[-56:])}' if len(self.output) > 59 else self.output
             aligner = self.aligner.capitalize()
             threads = self.threads
             plots   = "True" if self.args.plot else None
-            run = f'    ({self.assembly_run}/{self.assembly_count})' if self.assembly_count > 1 else ''
+            run     = f'    ({self.assembly_run}/{self.assembly_count})' if self.assembly_count > 1 else ''
             clutter = "True" if self.clutter else None
+            fix     = "True" if self.args.fix else None
             param_dict = {
                 'Assembly': assembly + run,
                 'Left': left,
@@ -250,6 +251,7 @@ if __name__ == "__main__":
                 'Output': output,
                 'Aligner': aligner,
                 'Threads': threads,
+                'Fix': fix,
                 'Plots': plots,
                 'Clutter': clutter
             }
@@ -273,6 +275,7 @@ if __name__ == "__main__":
                 t2.CLUTTER        = self.clutter
                 t2.THREADS        = self.threads
                 t2.COLOR          = self.color
+                t2.FIX            = self.args.fix
 
                 #### Analyses ####
                 # Assembly

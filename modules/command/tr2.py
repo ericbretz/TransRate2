@@ -31,7 +31,8 @@ class Tr2:
             if func.__name__ == 'csv':
                 self.csv_run(main)
             else:
-                main.TR_DCT = func(main.BAM_SORTED, main.TR_DCT, main.THREADS, main.READMODE)
+                threads = main.THREADS if not main.FIX else 1
+                main.TR_DCT = func(main.BAM_SORTED, main.TR_DCT, threads, main.READMODE)
 
             main.TIMES[func.__name__] = time.perf_counter() - main.TIMES[func.__name__] # Stop timer
             main.TPRINTED = False # Wait for terminal to print current stage

@@ -61,10 +61,19 @@ class Logging:
         red = '\033[91m'
         reset = '\033[0m'
         proc_len = len(process)
+        if len(main.LOG_PATH) >= 40:
+            check_path = f'...{main.LOG_PATH[-40:]}'
+        else:
+            check_path = main.LOG_PATH
+        check_log = f'Check {check_path} for more information'
+        check_len = len(check_log)
+        check_out = f'{red}  │ {reset} {check_log}{" " * (72 - check_len)}{red}│{reset}'
 
         print(f'{red}  ┌{"─" * 29}{reset}{"Failed":^16}{red}{"─" * 29}┐{reset}')
         print(f'{red}  │ {reset} There was an error running {red}{process}{" " * (45 - proc_len)}│{reset}')
+        print(check_out)
         print(f'{red}  └{"─" * 74}┘{reset}')
+        main.ERROR = True
         sys.exit(1)
 
         

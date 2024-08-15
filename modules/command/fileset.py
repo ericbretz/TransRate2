@@ -9,7 +9,8 @@ class FileSet:
 
     def run(self, main):
         self.create_transrate_paths(main)
-        self.create_aligner_paths(main)
+        if main.READMODE != 0:
+            self.create_aligner_paths(main)
         self.set_file_names(main)
 
     def create_transrate_paths(self, main):
@@ -17,7 +18,7 @@ class FileSet:
         if main.ASSEMBLY_RUN <= 1:
             for root, dirs, files in os.walk(main.OUTPUT):
                 for file in files:
-                    shutil.remove(os.path.join(root, file))
+                    os.remove(os.path.join(root, file))
                 for dir in dirs:
                     shutil.rmtree(os.path.join(root, dir))
 
