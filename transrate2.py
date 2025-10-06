@@ -97,7 +97,6 @@ class TransRate2:
         parser.error = error
 
         # Basic
-        parser.add_argument("--input-dir",  "-d",   type=str,    help="Directory containing input files",           default=self.defaults_dict['input_dir'])
         parser.add_argument("--output-dir", "-o",   type=str,    help="Output directory",                           default=self.defaults_dict['output_dir'])
         parser.add_argument("--threads",    "-t",   type=int,    help="Number of threads for parallel processing",  default=self.defaults_dict['threads'])
         parser.add_argument("--clutter",    "-c",                help="Remove intermediate files after completion", default=self.defaults_dict['clutter'],          action="store_true")

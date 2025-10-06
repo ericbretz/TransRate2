@@ -201,7 +201,6 @@ def print_help(hcolor, defaults, quiet=False, nocolor=False):
         return
     help_lines = [
         'BASIC:',
-        f'--input-dir             -d    DIR     Directory containing input files',
         f'--output-dir            -o    DIR     Output directory',
         f'--threads               -t    INT     Number of threads',
         f'--clutter               -c    BOOL    Remove intermediate files',
