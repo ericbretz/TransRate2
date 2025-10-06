@@ -9,18 +9,17 @@ class goodContig:
         return
     
     def mainRun(self, args):
-        main = args
-        self.goodContig(main)
+        assembly_data = args
+        self.goodContig(assembly_data)
         return self.goodDct
     
-    def goodContig(self, main):
-        cutoff = main['assemblyDF']['cutoff'].iloc[0]
-        fasta  = FastaFile(main['assembly'])
+    def goodContig(self, assembly_data):
+        cutoff = assembly_data['assemblyDF']['cutoff'].iloc[0]
+        fasta  = FastaFile(assembly_data['assembly'])
 
-        self.goodContiglist = main['contigDF'][main['contigDF']['score'] > cutoff]['name'].values.tolist()
-        main['contigDF'].to_csv(main['contigCSV'], index=False)
+        self.goodContiglist = assembly_data['contigDF'][assembly_data['contigDF']['score'] > cutoff]['name'].values.tolist()
         self.goodContigs    = len(self.goodContiglist)
-        self.badContigs     = len(main['contigDF']) - self.goodContigs
+        self.badContigs     = len(assembly_data['contigDF']) - self.goodContigs
         
         def write_fasta(file_path, contigs):
             with open(file_path, 'w') as file:
@@ -33,9 +32,9 @@ class goodContig:
                     file.writelines(lines[:-1])
                     file.truncate()
 
-        write_fasta(main['goodContig'], self.goodContiglist)
+        write_fasta(assembly_data['goodContig'], self.goodContiglist)
         bad_contigs = set(fasta.references) - set(self.goodContiglist)
-        write_fasta(main['badContig'], bad_contigs)
+        write_fasta(assembly_data['badContig'], bad_contigs)
         
         self.goodDct['assembly']['goodContigs'] = self.goodContigs
         self.goodDct['assembly']['badContigs']  = self.badContigs

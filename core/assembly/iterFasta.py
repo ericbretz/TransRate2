@@ -6,10 +6,10 @@ class IterFasta:
         return
     
     def mainRun(self, args):
-        main    = args[0]
-        i       = args[1]
-        fasta   = FastaFile(main['assembly'])
-        refs    = fasta.references[i::main['threads']]
+        assembly_data = args[0]
+        i             = args[1]
+        fasta         = FastaFile(assembly_data['assembly'])
+        refs          = fasta.references[i::assembly_data['threads']]
         iterDct = {'assembly': {'nUnder200' : 0,
                                 'nOver1k'   : 0,
                                 'nOver10k'  : 0,
