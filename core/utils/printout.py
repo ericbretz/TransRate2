@@ -5,12 +5,11 @@ from typing import Any, Dict, List, Union
 
 class PrintOut:
     def __init__(self, level, hc=None, bc=None):
-        self.level   = level
-        self.hc      = hc or '\033[34m'
-        self.bc      = bc or '\033[44m'
-        self.quiet   = False
-        self.nocolor = False
-        
+        self.level            = level
+        self.hc               = hc or '\033[34m'
+        self.bc               = bc or '\033[44m'
+        self.quiet            = False
+        self.nocolor          = False
         self.current_stage    = None
         self.stage_start_time = None
         self.stage_metrics    = {}
@@ -322,8 +321,8 @@ class PrintOut:
                 print(f"{metric_str}{reset} {value_str}")
         else:
             metric_str = self.fmt_str(self.fmt_key(str(metric)), value=None)
-            white_bg = '' if self.nocolor else '\033[47m'
-            reset =  '\033[0m'
+            white_bg   = '' if self.nocolor else '\033[47m'
+            reset      = '\033[0m'
             print(f"{white_bg}{metric_str:^{width}}{reset}")
 
     def p_info(self, info: str) -> None:
@@ -403,7 +402,7 @@ class PrintOut:
                     key_format      = self.map_contig[key]
                     formatted_value = self._format_metric_value(value)
                 else:
-                    key_format = key
+                    key_format      = key
                     formatted_value = str(value)
                 metric_line = f"  {key_format:<25} {formatted_value}"
                 print(metric_line[:80])

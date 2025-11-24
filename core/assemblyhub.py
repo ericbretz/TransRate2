@@ -17,28 +17,28 @@ import pandas as pd
 class AssemblyHub:
     def __init__(self, assembly_data, printout_class):
         self.printout_class = printout_class
-        self.printout = printout_class.printout
+        self.printout       = printout_class.printout
         pass
     
     def run(self, assembly_data):
         metric_classes = {
-            "Fasta Analysis"     : (iterFasta.IterFasta()    , True                , True),
-            "Basic Statistics"   : (calcFasta.CalcFasta()    , True                , False),
-            "N-Statistics"       : (nStats.NStats()          , True                , False),
-            "Salmon Integration" : (salmonStats.SalmonStats(), assembly_data['mode'] > 0 , False),
-            "Contig Iteration"   : (iterContig.IterContig()  , assembly_data['mode'] > 0 , True),
-            "Contig Calculation" : (calcContig.CalcContig()  , assembly_data['mode'] > 0 , False),
-            "Score Calculation"  : (scoreCalc.ScoreCalc()    , assembly_data['mode'] > 0 , False),
-            "Quality Assessment" : (goodContig.goodContig()  , assembly_data['mode'] > 0 , False),
-            # "Reference Analysis" : (reference.Reference()    , assembly_data['reference'], False)
+            "Analysing FASTA"      : (iterFasta.IterFasta()    , True                , True),
+            "FASTA Statistics"     : (calcFasta.CalcFasta()    , True                , False),
+            "N-Statistics"         : (nStats.NStats()          , True                , False),
+            "Salmon Quantification": (salmonStats.SalmonStats(), assembly_data['mode'] > 0 , False),
+            "Analysing Contigs"    : (iterContig.IterContig()  , assembly_data['mode'] > 0 , True),
+            "Contig Calculations"  : (calcContig.CalcContig()  , assembly_data['mode'] > 0 , False),
+            "Assembly Scoring"     : (scoreCalc.ScoreCalc()    , assembly_data['mode'] > 0 , False),
+            "Quality Assessment"   : (goodContig.goodContig()  , assembly_data['mode'] > 0 , False),
+            # "Reference Analysis"   : (reference.Reference()    , assembly_data['reference'], False)
         }
         
         self.printout_class.start_section("Assembly Stats")
         self.printout_class.start_progress_stage("Assembly Analysis")
         
         active_metrics = [(name, metric_class, threaded) for name, (metric_class, condition, threaded) in metric_classes.items() if condition]
-        
-        total_tasks = 0
+        total_tasks    = 0
+
         for name, metric_class, threaded in active_metrics:
             if threaded:
                 total_tasks += assembly_data['threads']
@@ -52,12 +52,12 @@ class AssemblyHub:
             self.printout_class.update_progress_bar(int(progress), 100, name)
             
             if threaded:
-                stage_metrics = self.metricProcessWithProgress(name, assembly_data, metric_class, completed_tasks, total_tasks)
+                stage_metrics    = self.metricProcessWithProgress(name, assembly_data, metric_class, completed_tasks, total_tasks)
                 completed_tasks += assembly_data['threads']
             else:
-                stage_metrics = self.metricProcess(name, assembly_data, metric_class, threaded=False)
+                stage_metrics    = self.metricProcess(name, assembly_data, metric_class, threaded=False)
                 completed_tasks += 1
-                progress = (completed_tasks / total_tasks) * 100
+                progress         = (completed_tasks / total_tasks) * 100
                 self.printout_class.update_progress_bar(int(progress), 100, name)
             
             self.printout_class.add_stage_to_section(stage_metrics)
@@ -97,9 +97,9 @@ class AssemblyHub:
                 
                 new_completed = sum(1 for result in async_results if result.ready())
                 if new_completed > completed_in_stage:
-                    completed_in_stage = new_completed
+                    completed_in_stage      = new_completed
                     current_total_completed = completed_tasks + completed_in_stage
-                    progress = (current_total_completed / total_tasks) * 100
+                    progress                = (current_total_completed / total_tasks) * 100
                     self.printout_class.update_progress_bar(int(progress), 100, name)
             
             results = [result.get() for result in async_results]
@@ -122,7 +122,7 @@ class AssemblyHub:
         if assembly_data['assemblyDF'].empty:
             assembly_data['assemblyDF'].loc[0] = None
         
-        idx = assembly_data['assemblyDF'].index[0]
+        idx      = assembly_data['assemblyDF'].index[0]
         new_cols = set(dfDct.keys()) - set(assembly_data['assemblyDF'].columns)
         if new_cols:
             for col in new_cols:
@@ -150,7 +150,7 @@ class AssemblyHub:
         for col in newCols:
             assembly_data['contigDF'][col] = None
         
-        dfUpdate = pd.DataFrame.from_dict(dfDct, orient='index')
+        dfUpdate            = pd.DataFrame.from_dict(dfDct, orient='index')
         dfUpdate.index.name = 'name'
         
         assembly_data['contigDF'] = assembly_data['contigDF'].merge(dfUpdate, on='name', how='left', suffixes=('', '_new'))
@@ -168,18 +168,21 @@ class AssemblyHub:
                 if pd.isna(value):
                     continue
                     
-                if key in ['nSeqs', 'bases', 'smallest', 'largest', 'meanLength', 'medianLength', 
-                          'stdLength', 'nUnder200', 'nOver1k', 'nOver10k', 'nWithOrf', 'n90', 
-                          'n70', 'n50', 'n30', 'n10', 'gcCount', 'basesN', 'fragments', 
-                          'fragmentsMapped', 'bothMapped', 'softclipped', 'goodMappings', 
-                          'badMappings', 'potentialBridges', 'basesUncovered', 'contigsUncovBase', 
-                          'contigsUncovered', 'contigsLowcovered', 'contigsSegmented', 
-                          'goodContigs', 'badContigs']:
+                if key in [
+                    'nSeqs'           , 'bases'            , 'smallest'        , 'largest'         , 'meanLength'       , 'medianLength'    , 
+                    'stdLength'       , 'nUnder200'        , 'nOver1k'         , 'nOver10k'        , 'nWithOrf'         , 'n90'             , 
+                    'n70'             , 'n50'              , 'n30'             , 'n10'             , 'gcCount'          , 'basesN'          ,
+                    'fragments'       , 'fragmentsMapped'  , 'bothMapped'      , 'softclipped'     , 'goodMappings'     , 'contigsUncovered',
+                    'badMappings'     , 'potentialBridges' , 'basesUncovered'  , 'contigsUncovBase', 'contigsLowcovered', 'contigsSegmented', 
+                    'goodContigs'     , 'badContigs'
+                          ]:
                     available_metrics[key] = self._format_large_number(value)
 
-                elif key in ['pGC', 'meanOrfPercent', 'pN', 'pFragmentsMapped', 'pSoftclipped', 
-                           'pGoodMappings', 'pBasesUncovered', 'pContigsUncovbase', 
-                           'pContigsUncovered', 'pContigsLowcovered', 'pContigsSegmented']:
+                elif key in [
+                    'pGC'              , 'meanOrfPercent'    , 'pN'               , 'pFragmentsMapped', 
+                    'pSoftclipped'     , 'pGoodMappings'     , 'pBasesUncovered'  , 'pContigsUncovbase', 
+                    'pContigsUncovered', 'pContigsLowcovered', 'pContigsSegmented'
+                    ]:
                     # available_metrics[key] = f"{value * 100:.2f}%"
                     available_metrics[key] = f"{value:.2f}"
                 elif key in ['score', 'optimalScore', 'cutoff', 'weighted']:

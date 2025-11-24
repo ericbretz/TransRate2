@@ -13,9 +13,9 @@ class Reference:
         return
     
     def mainRun(self, args):
-        assembly_data       = args
-        multi               :bool = assembly_data.get('multi', False)
-        rh_name             :str = assembly_data['assembly_base_name']
+        assembly_data         = args
+        multi        :bool    = assembly_data.get('multi', False)
+        rh_name      :str     = assembly_data['assembly_base_name']
         
         if not rh_name or rh_name.strip() == '':
             rh_name = os.path.splitext(os.path.basename(assembly_data['assembly']))[0]
@@ -64,23 +64,23 @@ class Reference:
         blastp   = ['diamond', 'blastp', '--threads', str(threads), '-b1', '--db', q2p_db_path, '--out', p2q_db_blast, '--query', referencePath, '--evalue', '0.00001', '--max-target-seqs', '50', '--masking', '0', '--ultra-sensitive', '--outfmt', '6', 'qseqid', 'sseqid', 'pident', 'length', 'mismatch', 'gapopen', 'qstart', 'qend', 'sstart', 'send', 'evalue', 'bitscore', 'qlen', 'slen']
 
         with open(f'{referenceOutput}/make_prot_db.log', 'w') as f:
-            make_prot_db = subprocess.Popen(prot_db, stdout=f, stderr=f, preexec_fn=os.setsid)
+            make_prot_db     = subprocess.Popen(prot_db, stdout=f, stderr=f, preexec_fn=os.setsid)
             make_prot_db_pid = make_prot_db.pid
             make_prot_db.communicate()
 
         with open(f'{referenceOutput}/make_query_db.log', 'w') as f:
-            make_query_db = subprocess.Popen(query_db, stdout=f, stderr=f, preexec_fn=os.setsid)
+            make_query_db     = subprocess.Popen(query_db, stdout=f, stderr=f, preexec_fn=os.setsid)
             make_query_db_pid = make_query_db.pid
             make_query_db.communicate()
          
 
         with open(f'{referenceOutput}/blastx.log', 'w') as f:
-            blastx = subprocess.Popen(blastx, stdout=f, stderr=f, preexec_fn=os.setsid)
+            blastx     = subprocess.Popen(blastx, stdout=f, stderr=f, preexec_fn=os.setsid)
             blastx_pid = blastx.pid
             blastx.communicate()
 
         with open(f'{referenceOutput}/blastp.log', 'w') as f:
-            blastp = subprocess.Popen(blastp, stdout=f, stderr=f, preexec_fn=os.setsid)
+            blastp     = subprocess.Popen(blastp, stdout=f, stderr=f, preexec_fn=os.setsid)
             blastp_pid = blastp.pid
             blastp.communicate()
 
@@ -130,28 +130,28 @@ class Reference:
                     f_out.write(''.join(translate_sequence(lines)) + '\n')
 
     def seq_count(self, assemblyPath, referencePath):
-        query_results = {}
+        query_results  = {}
         target_results = {}
-        n_seqs = [0]
-        p_seqs = [0]
+        n_seqs         = [0]
+        p_seqs         = [0]
         for type, file, seqs in [(query_results, assemblyPath, n_seqs), (target_results, referencePath, p_seqs)]:
             with open(file) as f:
-                seq = ''
+                seq   = ''
                 lines = f.readlines()
                 for line in lines:
                     if line.startswith('>'):
                         seqs[0] += 1
                         if seq:
-                            type[name]['seq'] = seq
+                            type[name]['seq']        = seq
                             type[name]['prot_guess'] = self.prot_guess(seq)
-                        seq = ''
+                        seq  = ''
                         name = line[1:].split()[0]
                         type[name] = {}
                     else:
                         seq += line.strip('\n')
 
                 if seq:
-                    type[name]['seq'] = seq
+                    type[name]['seq']        = seq
                     type[name]['prot_guess'] = self.prot_guess(seq)
         return query_results, target_results, n_seqs[0], p_seqs[0]
 
@@ -210,10 +210,10 @@ class Reference:
 
     def find_reciprocal_hits(self, query_results, target_results):
         reciprocals = {}
-        missed = {}
-        evalues = []
-        longest = 0
-        hits = 0
+        missed      = {}
+        evalues     = []
+        longest     = 0
+        hits        = 0
         for query_id, query_hits in query_results.items():
             if 'hits' not in query_hits:
                 continue
@@ -242,21 +242,21 @@ class Reference:
 
     def find_secondaries(self, evalues, referenceOutput, longest, missed, reciprocals):
         length_dict = {}
-        fitting = {}
+        fitting     = {}
         with open(f'{referenceOutput}/evalues_data', 'w') as f:
             for h in evalues:
                 length_dict.setdefault(h['length'], []).append(h)
                 f.write(f'{h["length"]}\t{h["e"]}\n')
 
         for center in range(10, longest + 1):
-            e = 0
+            e     = 0
             count = 0
-            s = int(center*0.1)
-            s = s if s >= 5 else 5
+            s     = int(center*0.1)
+            s     = s if s >= 5 else 5
             for side in range(-s, s +1):
                 if center + side in length_dict:
                     for point in length_dict[center + side]:
-                        e += point['e']
+                        e     += point['e']
                         count += 1
             if count:
                 mean = e / count
@@ -287,7 +287,7 @@ class Reference:
         return reciprocals, hits, missed, evalues, longest
     
     def reference_hits(self, reciprocals, target_results, n_seqs):
-        reference = {}
+        reference  = {}
         comp_stats = {}
         for name, contig in target_results.items():
             reference.setdefault(name, {'hits': [], 'crbb': False, 'prot': contig['prot_guess'], 'seq': contig['seq']})
@@ -302,8 +302,8 @@ class Reference:
 
     def rbh(self, reference, p_seqs):
         n_refs_with_recip = 0
-        total_crbb_hits = 0
-        comp_stats = {}
+        total_crbb_hits   = 0
+        comp_stats        = {}
         for x in reference:
             if 'hits' in reference[x] and len(reference[x]['hits']) > 0:
                 n_refs_with_recip += 1
@@ -311,8 +311,8 @@ class Reference:
             if 'hits' in reference[x]:
                 total_crbb_hits += len(reference[x]['hits'])
         comp_stats['rbhPerReference'] = round(total_crbb_hits / p_seqs, 6) if p_seqs > 0 else 0
-        comp_stats['nRefsWithCRBB']  = n_refs_with_recip
-        comp_stats['pRefsWithCRBB']  = round(n_refs_with_recip / p_seqs, 6) if p_seqs > 0 else 0
+        comp_stats['nRefsWithCRBB']   = n_refs_with_recip
+        comp_stats['pRefsWithCRBB']   = round(n_refs_with_recip / p_seqs, 6) if p_seqs > 0 else 0
         return reference, comp_stats
     
     def ref_coverage(self, reference):
@@ -320,7 +320,7 @@ class Reference:
         coverage_totals     = [0, 0, 0, 0, 0]
         total_coverage      = 0
         total_length        = 0
-        comp_stats = {}
+        comp_stats          = {}
 
         for k,v in reference.items():
             if v['prot'] and v['crbb']:
@@ -362,7 +362,7 @@ class Reference:
                         if 0 <= b - 1 < len(covered):
                             covered[b - 1] = True
                 coverage = sum(covered)
-                ref_p = coverage / len(covered) if len(covered) > 0 else 0
+                ref_p    = coverage / len(covered) if len(covered) > 0 else 0
                 v['reference_coverage'] = ref_p
                 for index, n in enumerate(coverage_thresholds):
                     if ref_p >= n:
@@ -372,7 +372,7 @@ class Reference:
                 total_length   += len(v['seq']) * 3 if v['prot'] else len(v['seq'])
 
         for i, p in enumerate(coverage_thresholds):
-            comp_stats[f"cov{(100 * p):.0f}"]   = coverage_totals[i]
+            comp_stats[f"cov{(100 * p):.0f}"]  = coverage_totals[i]
             comp_stats[f"pCov{(100 * p):.0f}"] = round(coverage_totals[i] / len(reference), 6)
 
         comp_stats['referenceCoverage'] = round(total_coverage / total_length, 6) if total_length > 0 else 0
@@ -388,9 +388,9 @@ class Reference:
         s = ""
         if multi:
             safe_rh_name = rh_name if rh_name else "assembly"
-            rhfile = f'{output}/{safe_rh_name}_reciprocal_hits.csv'
+            rhfile       = f'{output}/{safe_rh_name}_reciprocal_hits.csv'
         else:
-            rhfile = f'{output}/reciprocal_hits.csv'
+            rhfile       = f'{output}/reciprocal_hits.csv'
             
         os.makedirs(output, exist_ok=True)
             

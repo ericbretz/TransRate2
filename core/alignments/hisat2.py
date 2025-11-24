@@ -43,10 +43,10 @@ class Hisat2:
             returncode, stdout, stderr = self.logging_subprocess.run_with_logging(hisat2_index_cmd, "indexing")
         else:
             hisat2_index_run = subprocess.Popen(hisat2_index_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, shell=False)
-            stdout, stderr = hisat2_index_run.communicate()
-            returncode = hisat2_index_run.returncode
-            stdout = stdout.decode('utf-8') if stdout else ""
-            stderr = stderr.decode('utf-8') if stderr else ""
+            stdout, stderr   = hisat2_index_run.communicate()
+            returncode       = hisat2_index_run.returncode
+            stdout           = stdout.decode('utf-8') if stdout else ""
+            stderr           = stderr.decode('utf-8') if stderr else ""
         
         if returncode != 0:
             self.printout('error', f"HISAT2 indexing failed: {stderr}")
@@ -56,8 +56,8 @@ class Hisat2:
         self.printout_class.update_progress_bar(3, 3, "Finalizing", {"Index Size": index_size})
         
         final_metrics = {
-            "# Index Files": len([f for f in os.listdir(self.aligner_dir) if f.startswith(os.path.basename(str(self.aligner_index_pre)))]),
-            "Index Size": index_size
+            "# Index Files": len([f for f in os.listdir(self.aligner_index_dir) if f.startswith(os.path.basename(str(self.aligner_index_pre)))]),
+            "Index Size"   : index_size
         }
         
         print()
@@ -82,17 +82,17 @@ class Hisat2:
         if self.logging_subprocess:
             returncode, stdout, stderr = self.logging_subprocess.run_with_logging(hisat2_cmd, "alignment")
         else:
-            hisat2_run = subprocess.Popen(hisat2_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, shell=False)
+            hisat2_run     = subprocess.Popen(hisat2_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, shell=False)
             stdout, stderr = hisat2_run.communicate()
-            returncode = hisat2_run.returncode
-            stdout = stdout.decode('utf-8') if stdout else ""
-            stderr = stderr.decode('utf-8') if stderr else ""
+            returncode     = hisat2_run.returncode
+            stdout         = stdout.decode('utf-8') if stdout else ""
+            stderr         = stderr.decode('utf-8') if stderr else ""
         
         if returncode != 0:
             self.printout('error', f"HISAT2 alignment failed: {stderr}")
             sys.exit(1)
         
-        output_size = self._get_bam_size()
+        output_size     = self._get_bam_size()
         alignment_stats = self._parse_alignment_stats(stderr)
         self.printout_class.update_progress_bar(3, 3, "Processing output", {"Size": output_size})
         
@@ -111,9 +111,9 @@ class Hisat2:
     def _get_index_size(self):
         try:
             total_size = 0
-            for f in os.listdir(self.aligner_dir):
+            for f in os.listdir(self.aligner_index_dir):
                 if f.startswith(os.path.basename(str(self.aligner_index_pre))):
-                    file_path   = os.path.join(self.aligner_dir, f)
+                    file_path   = os.path.join(self.aligner_index_dir, f)
                     total_size += os.path.getsize(file_path)
             return f"{total_size / (1024*1024):.1f}MB"
         except:

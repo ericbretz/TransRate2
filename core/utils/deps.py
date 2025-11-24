@@ -29,7 +29,7 @@ class Deps:
             self.printClass.set_quiet(True)
         self.printout('subtitle', 'Checking dependencies')
         missing_deps = []
-        found_deps = {}
+        found_deps   = {}
         
         for dep, cmd in self.deps.items():
             if not shutil.which(cmd):

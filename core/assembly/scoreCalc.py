@@ -10,9 +10,20 @@ class ScoreCalc:
     
     def mainRun(self, args):
         assembly_data = args
-        self.scoreDct = {'assembly': {'score': 0, 'optimalScore': 0, 'cutoff': 0, 'weighted': 0},
-                         'contigs': {ref: {'score': 0, 'sCnuc': 0, 'sCcov': 0, 'sCord': 0, 'sCseg': 0} 
-                                     for ref in assembly_data['refList']}}
+        self.scoreDct = {'assembly': {
+                                    'score'       : 0,
+                                    'optimalScore': 0,
+                                    'cutoff'      : 0,
+                                    'weighted'    : 0
+                                    },
+                         'contigs': {ref: {
+                                    'score'       : 0,
+                                    'sCnuc'       : 0,
+                                    'sCcov'       : 0,
+                                    'sCord'       : 0,
+                                    'sCseg'       : 0
+                                    } 
+                                    for ref in assembly_data['refList']}}
         contigDF = assembly_data['contigDF']
         
         if assembly_data['mode'] == 2:
@@ -67,10 +78,10 @@ class ScoreCalc:
         return max(row['pNotSegmented'], 1e-2)
     
     def optimal_score(self, assembly_data):
-        opt_product = sum(math.log(self.scoreDct['contigs'][ref]['score']) for ref in self.scoreDct['contigs'])
-        opt_good = self.goodTotal
-        opt_count = len(self.scoreDct['contigs'])
-        cutoffscore = {}
+        opt_product  = sum(math.log(self.scoreDct['contigs'][ref]['score']) for ref in self.scoreDct['contigs'])
+        opt_good     = self.goodTotal
+        opt_count    = len(self.scoreDct['contigs'])
+        cutoffscore  = {}
         score_sorted = sorted(((self.scoreDct['contigs'][ref]['score'], self.good[ref]) for ref in self.scoreDct['contigs']), key=lambda x: x[0])
         for score, good in score_sorted:
             opt_product -= math.log(score)

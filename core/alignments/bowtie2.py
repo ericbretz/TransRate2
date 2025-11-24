@@ -37,11 +37,11 @@ class Bowtie2:
         if self.logging_subprocess:
             returncode, stdout, stderr = self.logging_subprocess.run_with_logging(bt2_index_cmd, "indexing")
         else:
-            bt2_index_run = subprocess.Popen(bt2_index_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, shell=False)
+            bt2_index_run  = subprocess.Popen(bt2_index_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, shell=False)
             stdout, stderr = bt2_index_run.communicate()
-            returncode = bt2_index_run.returncode
-            stdout = stdout.decode('utf-8') if stdout else ""
-            stderr = stderr.decode('utf-8') if stderr else ""
+            returncode     = bt2_index_run.returncode
+            stdout         = stdout.decode('utf-8') if stdout else ""
+            stderr         = stderr.decode('utf-8') if stderr else ""
         
         if returncode != 0:
             self.printout('error', f"Bowtie2 indexing failed: {stderr}")
@@ -51,7 +51,7 @@ class Bowtie2:
         self.printout_class.update_progress_bar(3, 3, "Finalizing", {"Index Size": index_size})
         
         final_metrics = {
-            "# Index Files": len([f for f in os.listdir(self.aligner_dir) if f.startswith(os.path.basename(str(self.aligner_prefix)))]),
+            "# Index Files": len([f for f in os.listdir(self.aligner_index) if f.startswith(os.path.basename(str(self.aligner_prefix)))]),
             "Index Size": index_size
         }
         
@@ -78,17 +78,17 @@ class Bowtie2:
         if self.logging_subprocess:
             returncode, stdout, stderr = self.logging_subprocess.run_with_logging(bt2_cmd, "alignment")
         else:
-            bt2_run = subprocess.Popen(bt2_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, shell=False)
+            bt2_run        = subprocess.Popen(bt2_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, shell=False)
             stdout, stderr = bt2_run.communicate()
-            returncode = bt2_run.returncode
-            stdout = stdout.decode('utf-8') if stdout else ""
-            stderr = stderr.decode('utf-8') if stderr else ""
+            returncode     = bt2_run.returncode
+            stdout         = stdout.decode('utf-8') if stdout else ""
+            stderr         = stderr.decode('utf-8') if stderr else ""
         
         if returncode != 0:
             self.printout('error', f"Bowtie2 alignment failed: {stderr}")
             sys.exit(1)
         
-        output_size = self._get_bam_size()
+        output_size     = self._get_bam_size()
         alignment_stats = self._parse_alignment_stats(stderr)
         self.printout_class.update_progress_bar(3, 3, "Processing output", {"Size": output_size})
         
@@ -107,9 +107,9 @@ class Bowtie2:
     def _get_index_size(self):
         try:
             total_size = 0
-            for f in os.listdir(self.aligner_dir):
+            for f in os.listdir(self.aligner_index):
                 if f.startswith(os.path.basename(str(self.aligner_prefix))):
-                    file_path = os.path.join(self.aligner_dir, f)
+                    file_path = os.path.join(self.aligner_index, f)
                     total_size += os.path.getsize(file_path)
             return f"{total_size / (1024*1024):.1f}MB"
         except:

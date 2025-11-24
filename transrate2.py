@@ -29,7 +29,7 @@ s: Skip Summary
 
 MAJOR   = 2                                                            
 MINOR   = 9                                                            
-PATCH   = 1                                                            
+PATCH   = 2
 
 VERSION = f"{MAJOR}.{MINOR}.{PATCH}"                                   
 
@@ -246,7 +246,7 @@ class TransRate2:
         
         self.nocolor = getattr(args, 'nocolor', False)
         if self.nocolor:
-            self.highlight_color = ''
+            self.highlight_color  = ''
             self.background_color = ''
             self.printClass.set_nocolor(True)
             self.config_manager.set_nocolor(True)

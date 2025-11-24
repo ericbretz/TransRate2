@@ -4,9 +4,9 @@ from pysam import FastaFile
 class NStats:
     
     def mainRun(self, args):
-        assembly_data = args
-        bases         = assembly_data['assemblyDF']['bases'].iloc[0]
-        fasta         = FastaFile(assembly_data['assembly'])
+        assembly_data                       = args
+        bases                               = assembly_data['assemblyDF']['bases'].iloc[0]
+        fasta                               = FastaFile(assembly_data['assembly'])
         lengths                             = fasta.lengths
         baseDct                             = {'assembly': {'n90': 0, 
                                                             'n70': 0, 
