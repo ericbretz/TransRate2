@@ -10,20 +10,22 @@ class IterFasta:
         i             = args[1]
         fasta         = FastaFile(assembly_data['assembly'])
         refs          = fasta.references[i::assembly_data['threads']]
-        iterDct = {'assembly': {'nUnder200' : 0,
-                                'nOver1k'   : 0,
-                                'nOver10k'  : 0,
-                                'nWithOrf'  : 0,
-                                'orfLenSum' : 0,
-                                'bases'     : 0,
-                                'basesN'    : 0,
-                                'gcCount'   : 0,
-                                'refCount'  : len(refs)
+        iterDct = {'assembly':  {'nUnder200': 0,
+                                 'nOver1k'  : 0,
+                                 'nOver10k' : 0,
+                                 'nWithOrf' : 0,
+                                 'orfLenSum': 0,
+                                 'bases'    : 0,
+                                 'basesN'   : 0,
+                                 'gcCount'  : 0,
+                                 'refCount' : len(refs)
                                 },
-                    'contigs': {ref: {'orfLength'   : 0, 
-                                        'pGC'       : 0,
-                                        'gcCount'   : 0,
-                                        'basesN'    : 0} for ref in refs}
+                    'contigs': {
+                        ref:    {'orfLength': 0, 
+                                'pGC'       : 0,
+                                'gcCount'   : 0,
+                                'basesN'    : 0} 
+                                for ref in refs}
                                 }
         for ref in refs:
             seq                                  = fasta.fetch(ref)

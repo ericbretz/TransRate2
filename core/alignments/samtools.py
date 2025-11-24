@@ -37,8 +37,8 @@ class Samtools:
             samtools_sort_run = subprocess.Popen(samtools_sort_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, shell=False)
             stdout, stderr    = samtools_sort_run.communicate()
             returncode        = samtools_sort_run.returncode
-            stdout = stdout.decode('utf-8') if stdout else ""
-            stderr = stderr.decode('utf-8') if stderr else ""
+            stdout            = stdout.decode('utf-8') if stdout else ""
+            stderr            = stderr.decode('utf-8') if stderr else ""
         
         if returncode != 0:
             self.printout('error', f"Samtools sort failed: {stderr}")
@@ -47,7 +47,7 @@ class Samtools:
         output_size = self._get_output_size()
         
         final_metrics = {
-            "Input Size": input_size,
+            "Input Size" : input_size,
             "Output Size": output_size,
         }
         
@@ -73,10 +73,10 @@ class Samtools:
             returncode, stdout, stderr = self.logging_subprocess.run_with_logging(samtools_index_cmd, "index")
         else:
             samtools_index_run = subprocess.Popen(samtools_index_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, shell=False)
-            stdout, stderr = samtools_index_run.communicate()
-            returncode = samtools_index_run.returncode
-            stdout = stdout.decode('utf-8') if stdout else ""
-            stderr = stderr.decode('utf-8') if stderr else ""
+            stdout, stderr     = samtools_index_run.communicate()
+            returncode         = samtools_index_run.returncode
+            stdout             = stdout.decode('utf-8') if stdout else ""
+            stderr             = stderr.decode('utf-8') if stderr else ""
         
         if returncode != 0:
             self.printout('error', f"Samtools index failed: {stderr}")
@@ -85,7 +85,7 @@ class Samtools:
         index_size = self._get_index_size()
         
         final_metrics = {
-            "Bam Size": bam_size,
+            "Bam Size"  : bam_size,
             "Index Size": index_size,
         }
         

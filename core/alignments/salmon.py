@@ -32,19 +32,19 @@ class Salmon:
         if self.logging_subprocess:
             returncode, stdout, stderr = self.logging_subprocess.run_with_logging(salmon_cmd, "quantification")
         else:
-            salmon_run = subprocess.Popen(salmon_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, shell=False)
+            salmon_run     = subprocess.Popen(salmon_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid, shell=False)
             stdout, stderr = salmon_run.communicate()
-            returncode = salmon_run.returncode
-            stdout = stdout.decode('utf-8') if stdout else ""
-            stderr = stderr.decode('utf-8') if stderr else ""
+            returncode     = salmon_run.returncode
+            stdout         = stdout.decode('utf-8') if stdout else ""
+            stderr         = stderr.decode('utf-8') if stderr else ""
         
         if returncode != 0:
             self.printout('error', f"Salmon quantification failed: {stderr}")
             sys.exit(1)
         
         output_size = self._get_output_size()
-        log_stats = self._parse_salmon_log()
-        meta_stats = self._parse_meta_info()
+        log_stats   = self._parse_salmon_log()
+        meta_stats  = self._parse_meta_info()
         quant_stats = self._parse_quant_file()
         self.printout_class.update_progress_bar(3, 3, "Processing output", {"Size": output_size})
         
@@ -121,8 +121,8 @@ class Salmon:
         try:
             if os.path.exists(quant_file):
                 with open(quant_file, 'r') as f:
-                    lines = f.readlines()
-                    transcript_count = len(lines) - 1
+                    lines                = f.readlines()
+                    transcript_count     = len(lines) - 1
                     stats['Transcripts'] = f"{transcript_count:,}"
                     
                     total_tpm = 0

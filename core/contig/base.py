@@ -1,4 +1,3 @@
-import numpy as np
 from pysam import AlignmentFile
 
 def mainRun(args):

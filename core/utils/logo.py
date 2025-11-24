@@ -14,8 +14,8 @@ COLORS = {
 def get_transrate_colors():
     return [
         (COLORS['yellow']['bg'], COLORS['yellow']['fg']),
-        (COLORS['green']['bg'], COLORS['green']['fg']),
-        (COLORS['red']['bg'], COLORS['red']['fg'])
+        (COLORS['green']['bg'] , COLORS['green']['fg']),
+        (COLORS['red']['bg']   , COLORS['red']['fg'])
     ]
 
 def draw_box(lines, hcolor, nocolor=False):
@@ -238,8 +238,6 @@ def print_args(args, passed_args):
     nocolor = getattr(args, 'nocolor', False)
     hcolor  = '' if nocolor else getattr(args, 'highlight_color', COLORS['blue']['fg'])
     
-    dir_path = str(os.getcwd())[-30:] if not args.input_dir else ('..' + args.input_dir[-38:] if len(args.input_dir) > 40 else args.input_dir)
-    
     assembly_display = 'None'
     if args.assembly:
         assembly_files = [f.strip() for f in args.assembly.split(',')]
@@ -250,7 +248,6 @@ def print_args(args, passed_args):
     
     arg_mappings = {
         'BASIC:': {
-            'input_dir'                 : [f'Input directory:', dir_path],
             'output_dir'                : [f'Output directory:', args.output_dir if args.output_dir else 'Same as input'],
             'threads'                   : [f'Threads:', args.threads],
             'clutter'                   : [f'Remove intermediate files:', args.clutter],
@@ -272,17 +269,26 @@ def print_args(args, passed_args):
         }
     }
     
+    def truncate_value(value, max_len=41):
+        value_str = str(value)
+        if len(value_str) > max_len:
+            return '...' + value_str[-(max_len-3):]
+        return value_str
+    
     args_list = []
     for stage, arg_dict in arg_mappings.items():
         stage_args = []
         for k, v in arg_dict.items():
             if k in passed_args:
                 if isinstance(v[1], list):
-                    stage_args.append(f'  {v[0]:<33} {v[1][0]}')
+                    truncated_first = truncate_value(v[1][0])
+                    stage_args.append(f'  {v[0]:<33} {truncated_first}')
                     for item in v[1][1:]:
-                        stage_args.append(f'  {"":>33} {item}')
+                        truncated_item = truncate_value(item)
+                        stage_args.append(f'  {"":>33} {truncated_item}')
                 else:
-                    stage_args.append(f'  {v[0]:<33} {v[1]}')
+                    truncated_val = truncate_value(v[1])
+                    stage_args.append(f'  {v[0]:<33} {truncated_val}')
         
         if stage_args:
             args_list.append(stage)

@@ -32,6 +32,11 @@ class CSV:
     def contigCSV(self, assembly_data):
         contigDF  = assembly_data['contigDF'][assembly_data['cHeaders']].copy()
         
+        for col in self.intVars:
+            if col in contigDF.columns:
+                contigDF[col] = contigDF[col].fillna(0)
+                contigDF[col] = contigDF[col].replace([np.inf, -np.inf], 0)
+        
         dtype_map = {col: 'int' for col in self.intVars if col in contigDF.columns}
         dtype_map.update({col: 'float' for col in self.floatVars if col in contigDF.columns})
         

@@ -67,8 +67,8 @@ def mainRun(args):
                 pass
                 
             try:
-                cigar = fetch.cigartuples
-                f_length = fetch.query_length
+                cigar         = fetch.cigartuples
+                f_length      = fetch.query_length
                 total_length += f_length
 
                 if cigar:

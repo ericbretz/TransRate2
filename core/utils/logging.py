@@ -139,7 +139,7 @@ class TransRateLogger:
 
 class LoggingSubprocess:
     def __init__(self, logger: TransRateLogger, tool_name: str):
-        self.logger = logger
+        self.logger    = logger
         self.tool_name = tool_name
     
     def run_with_logging(self, command: list, mode: str = "") -> tuple:

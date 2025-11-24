@@ -7,7 +7,7 @@ class ConfigManager:
     def __init__(self, highlight_color, background_color, version='0.1.0'):
         self.highlight_color  = highlight_color
         self.background_color = background_color
-        self.version         = version
+        self.version          = version
         self.config_dir       = Path.home() / '.transrate2'
         self.printClass       = PrintOut('', self.highlight_color, self.background_color)
         self.printout         = self.printClass.printout
@@ -21,7 +21,6 @@ class ConfigManager:
     def get_defaults_dict(self):
         return {
             # Basic
-            'input_dir'               : os.getcwd(),
             'output_dir'              : os.getcwd(),
             'threads'                 : 4,
             'clutter'                 : False,
@@ -46,7 +45,6 @@ class ConfigManager:
     def get_parameter_types(self):
         return {
             # Basic
-            'input_dir'               : 'string',
             'output_dir'              : 'string', 
             'threads'                 : 'integer',
             'clutter'                 : 'boolean',
