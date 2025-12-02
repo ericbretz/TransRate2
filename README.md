@@ -108,26 +108,26 @@ python transrate2.py --assembly assembly.fasta --left reads_1.fq --right reads_2
 
 
 
-| Option         | Short | Description                                      | Default         |
-|----------------|-------|--------------------------------------------------|-----------------|
-| `--assembly`   | `-a`  | Assembly file(s), comma separated                | *Required*      |
-| `--left`       | `-l`  | Left reads file (FASTQ)                          |                 |
-| `--right`      | `-r`  | Right reads file (FASTQ)                         |                 |
-| `--reference`  | `-f`  | Reference file (FASTA, optional)                 |                 |
-| `--bam`        | `-x`  | BAM file for pre-aligned reads                   |                 |
-| `--output-dir` | `-o`  | Output directory                                 | Current dir     |
-| `--threads`    | `-t`  | Number of threads                                | `4`             |
-| `--hisat2`     | `-s`  | Use Hisat2 aligner (default: Bowtie2)            | `False`         |
-| `--bowtie2`    | `-b`  | Use Bowtie2 aligner                              | `True`          |
-| `--clutter`    | `-c`  | Remove intermediate files                        | `False`         |
-| `--quiet`      | `-q`  | Suppress terminal output                         | `False`         |
-| `--debug`      |       | Enable debug mode                               | `False`         |
-| `--nocolor`    |       | Disable colored terminal output                  | `False`         |
-| `--config`     |       | Path to configuration file                       |                 |
-| `--config-create` |    | Create configuration template                    | `config.yaml`   |
-| `--config-save`   |    | Save current arguments to config file           | `config.yaml`   |
-| `--version`    | `-v`  | Print version                                    |                 |
-| `--help`       | `-h`  | Display help message                             |                 |
+| Option             | Short | Description                                      | Default         |
+|--------------------|-------|--------------------------------------------------|-----------------|
+| `--assembly`       | `-a`  | Assembly file(s), comma separated                | *Required*      |
+| `--left`           | `-l`  | Left reads file (FASTQ)                          |                 |
+| `--right`          | `-r`  | Right reads file (FASTQ)                         |                 |
+| `--reference`      | `-f`  | Reference file (FASTA, optional)                 |                 |
+| `--bam`            | `-x`  | BAM file for pre-aligned reads                   |                 |
+| `--output-dir`     | `-o`  | Output directory                                 | Current dir     |
+| `--threads`        | `-t`  | Number of threads                                | `4`             |
+| `--hisat2`         | `-s`  | Use Hisat2 aligner (default: Bowtie2)            | `False`         |
+| `--bowtie2`        | `-b`  | Use Bowtie2 aligner                              | `True`          |
+| `--clutter`        | `-c`  | Remove intermediate files                        | `False`         |
+| `--quiet`          | `-q`  | Suppress terminal output                         | `False`         |
+| `--debug`          |       | Enable debug mode                                | `False`         |
+| `--nocolor`        |       | Disable colored terminal output                  | `False`         |
+| `--config`         |       | Path to configuration file                       |                 |
+| `--config-create`  |       | Create configuration template                    | `config.yaml`   |
+| `--config-save`    |       | Save current arguments to config file            | `config.yaml`   |
+| `--version`        | `-v`  | Print version                                    |                 |
+| `--help`           | `-h`  | Display help message                             |                 |
 
 
 
@@ -217,7 +217,6 @@ python transrate2.py -v
 <h2><img src="https://i.imgur.com/3UA4xwp.png" width="20" align="top">&ensp;Overview</h2>
 
 
-
 1. **Input Validation** - Comprehensive validation of input files and formats with support for multiple input modes.
 
 2. **Multi-Assembly Processing** - Process multiple assemblies in a single run for comparative analysis.
@@ -249,71 +248,66 @@ python transrate2.py -v
 TransRate2 creates an output directory structure containing:
 
 
-
 ```
 TransRate2/
-├── results/                         # Main analysis results
-│   ├── <assembly_name>.contigs.csv      # Per-contig metrics
-│   ├── good.<assembly_name>.fa          # Good contigs (FASTA)
-│   ├── bad.<assembly_name>.fa           # Bad contigs (FASTA)
-│   ├── assembly_score_optimisation.csv  # Score optimization data
-│   └── assembly.csv                     # Combined summary for all assemblies
-├── logs/                            # Comprehensive log files with stage tracking
+├── results/                                        # Main analysis results
+│   ├── <assembly_name>.contigs.csv                 # Per-contig metrics
+│   ├── good.<assembly_name>.fa                     # Good contigs (FASTA)
+│   ├── bad.<assembly_name>.fa                      # Bad contigs (FASTA)
+│   ├── assembly_score_optimisation.csv             # Score optimization data
+│   └── assembly.csv                                # Combined summary for all assemblies
+├── logs/                                           # Comprehensive log files with stage tracking
 │   ├── transrate2_<assembly_name>_<timestamp>.log  # Main analysis log
 │   ├── <aligner>_<assembly_name>_stdout.log        # Aligner output logs
 │   ├── <aligner>_<assembly_name>_stderr.log        # Aligner error logs
 │   ├── salmon_<assembly_name>_stdout.log           # Salmon output logs
 │   ├── salmon_<assembly_name>_stderr.log           # Salmon error logs
 │   └── samtools_<assembly_name>_stdout.log         # Samtools logs
-└── temp/                            # Temporary files (removed with --clutter)
+└── temp/                                           # Temporary files (removed with --clutter)
     ├── alignments/
     │   └── <aligner>/
-    │       ├── index/                   # Aligner index files
-    │       └── <assembly_name>_aligned.bam  # Alignment results
+    │       ├── index/                              # Aligner index files
+    │       └── <assembly_name>_aligned.bam         # Alignment results
     ├── bam/
-    │   ├── <assembly_name>_sorted.bam       # Sorted BAM file
-    │   └── <assembly_name>_sorted.bam.bai   # BAM index
-    ├── salmon/                          # Salmon quantification files
+    │   ├── <assembly_name>_sorted.bam              # Sorted BAM file
+    │   └── <assembly_name>_sorted.bam.bai          # BAM index
+    ├── salmon/                                     # Salmon quantification files
     │   ├── aux_info/
     │   ├── logs/
     │   ├── quant.sf
     │   └── ...
     ├── analysis/
-    │   └── <assembly_name>.assembly.json    # Assembly analysis data
-    └── reference/                       # Reference-based results (if used)
+    │   └── <assembly_name>.assembly.json           # Assembly analysis data
+    └── reference/                                  # Reference-based results
         └── reciprocal_hits.csv
 ```
-
-> **Note:** In multi-assembly mode, each assembly gets its own subdirectory within `results/`, `logs/`, and `temp/` directories (e.g., `results/<assembly_name>/`, `logs/<assembly_name>/`, `temp/<assembly_name>/`).
-
-
 
 <h2><img src="https://i.imgur.com/3UA4xwp.png" width="20" align="top">&ensp;Output Files</h2>
 
 
 
-#### Main Results (in `results/` directory)
+#### Main Results
 - **`<assembly_name>.contigs.csv`** - Per-contig metrics and quality scores
 - **`good.<assembly_name>.fa`** - High-quality contigs (FASTA)
 - **`bad.<assembly_name>.fa`** - Low-quality contigs (FASTA)
 - **`assembly_score_optimisation.csv`** - Score optimization data
 - **`assembly.csv`** - Combined summary for all assemblies
 
-#### Logs (in `logs/` directory)
+#### Logs
 - **`transrate2_<assembly_name>_<timestamp>.log`** - Main analysis log with stage tracking
 - **`<aligner>_<assembly_name>_stdout.log`** - Aligner output logs
 - **`salmon_<assembly_name>_stdout.log`** - Salmon quantification logs
 
-#### Temporary Files (in `temp/` directory, removed with `--clutter`)
+#### Temporary Files
 - **`alignments/<aligner>/`** - Aligner indices and BAM files
 - **`salmon/quant.sf`** - Salmon quantification results
 - **`bam/<assembly_name>_sorted.bam`** - Sorted alignment file
 - **`analysis/<assembly_name>.assembly.json`** - Assembly analysis data
-- **`reference/reciprocal_hits.csv`** - Reference-based reciprocal best hits (if reference provided)
+- **`reference/reciprocal_hits.csv`** - Reference-based reciprocal best hits
 
 <h2><img src="https://i.imgur.com/3UA4xwp.png" width="20" align="top">&ensp;Configuration Management</h2>
 
-TransRate2 includes a powerful YAML-based configuration system for reproducible analyses:
+TransRate2 includes a YAML configuration system for reproducible analyses:
 
 #### Creating Configuration Files
 ```bash
