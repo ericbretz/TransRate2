@@ -29,7 +29,7 @@ s: Skip Summary
 
 MAJOR   = 2                                                            
 MINOR   = 9                                                            
-PATCH   = 2
+PATCH   = 3
 
 VERSION = f"{MAJOR}.{MINOR}.{PATCH}"                                   
 

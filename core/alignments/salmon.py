@@ -70,6 +70,10 @@ class Salmon:
             if os.path.exists(self.dict_file['salmon_bam']):
                 size = os.path.getsize(self.dict_file['salmon_bam'])
                 return f"{size / (1024*1024):.1f}MB"
+            temp_bam = os.path.join(self.dict_dir['temp_salmon'], 'postSample.bam')
+            if os.path.exists(temp_bam):
+                size = os.path.getsize(temp_bam)
+                return f"{size / (1024*1024):.1f}MB"
             return "unknown"
         except:
             return "unknown"

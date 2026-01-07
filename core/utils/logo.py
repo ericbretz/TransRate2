@@ -246,19 +246,29 @@ def print_args(args, passed_args):
         else:
             assembly_display = args.assembly
     
+    is_single_end = (bool(args.left) != bool(args.right))
+    
+    assembly_section = {
+        'assembly'                  : [f'Assembly file(s):', assembly_display],
+        'reference'                 : [f'Reference:', args.reference if args.reference else 'None'],
+        'bam'                       : [f'BAM file:', args.bam if args.bam else 'None'],
+    }
+    
+    if is_single_end:
+        reads_file                  = args.left if args.left else args.right
+        reads_key                   = 'left' if args.left else 'right'
+        assembly_section[reads_key] = [f'Reads:', reads_file if reads_file else 'None']
+    else:
+        assembly_section['left']    = [f'Left reads:', args.left if args.left else 'None']
+        assembly_section['right']   = [f'Right reads:', args.right if args.right else 'None']
+    
     arg_mappings = {
         'BASIC:': {
             'output_dir'                : [f'Output directory:', args.output_dir if args.output_dir else 'Same as input'],
             'threads'                   : [f'Threads:', args.threads],
             'clutter'                   : [f'Remove intermediate files:', args.clutter],
         },
-        'ASSEMBLY:': {
-            'assembly'                  : [f'Assembly file(s):', assembly_display],
-            'left'                      : [f'Left reads:', args.left if args.left else 'None'],
-            'right'                     : [f'Right reads:', args.right if args.right else 'None'],
-            'reference'                 : [f'Reference:', args.reference if args.reference else 'None'],
-            'bam'                       : [f'BAM file:', args.bam if args.bam else 'None'],
-        },
+        'ASSEMBLY:':                       assembly_section,
         'ALIGNER:': {
             'aligner'                   : [f'Aligner:', getattr(args, 'aligner', 'bowtie2').title()],
         },
