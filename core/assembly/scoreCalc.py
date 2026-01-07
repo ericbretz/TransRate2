@@ -44,7 +44,7 @@ class ScoreCalc:
     
     def scores(self, assembly_data, contigDF):
         scoreList = contigDF.apply(lambda row: self.calculate_scores(row), axis=1).tolist()
-        self.rawScore(scoreList)
+        self.rawScore(scoreList, assembly_data)
         return scoreList
 
     def calculate_scores(self, row):
@@ -58,8 +58,13 @@ class ScoreCalc:
         self.scoreDct['contigs'][ref].update({'sCnuc': sCnuc, 'sCcov': sCcov, 'sCord': sCord, 'sCseg': sCseg, 'score': s})
         return s
 
-    def rawScore(self, scoreList):
-        self.scoreDct['assembly']['score'] = self.harmMean(scoreList)
+    def rawScore(self, scoreList, assembly_data):
+        harm_mean = self.harmMean(scoreList)
+        if assembly_data['readCount'] > 0:
+            read_support = self.goodTotal / assembly_data['readCount']
+            self.scoreDct['assembly']['score'] = harm_mean * read_support
+        else:
+            self.scoreDct['assembly']['score'] = harm_mean
     
     def harmMean(self, score):
         f = np.array([s for s in score if s > 0])
@@ -78,17 +83,25 @@ class ScoreCalc:
         return max(row['pNotSegmented'], 1e-2)
     
     def optimal_score(self, assembly_data):
-        opt_product  = sum(math.log(self.scoreDct['contigs'][ref]['score']) for ref in self.scoreDct['contigs'])
+        opt_scores   = [self.scoreDct['contigs'][ref]['score'] for ref in self.scoreDct['contigs']]
         opt_good     = self.goodTotal
-        opt_count    = len(self.scoreDct['contigs'])
         cutoffscore  = {}
         score_sorted = sorted(((self.scoreDct['contigs'][ref]['score'], self.good[ref]) for ref in self.scoreDct['contigs']), key=lambda x: x[0])
+        
         for score, good in score_sorted:
-            opt_product -= math.log(score)
-            opt_good    -= good
-            opt_count    = max(opt_count - 1, 1)
-            new_score    = math.exp(opt_product / opt_count) * (opt_good / assembly_data['readCount'])
+            opt_scores.remove(score)
+            opt_good -= good
+            opt_count = len(opt_scores)
+            
+            if opt_count > 0 and assembly_data['readCount'] > 0:
+                harm_mean    = self.harmMean(opt_scores)
+                read_support = opt_good / assembly_data['readCount']
+                new_score    = harm_mean * read_support
+            else:
+                new_score = 0
+            
             cutoffscore[score] = new_score
+        
         optimal, cutoff = max(cutoffscore.items(), key=lambda x: x[1])
         self.scoreDct['assembly'].update({'optimalScore': optimal, 'cutoff': cutoff})
         pd.DataFrame(list(cutoffscore.items()), columns=['cutoff', 'score']).round(5).to_csv(assembly_data['scoreOptCSV'], index=False)
