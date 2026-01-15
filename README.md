@@ -1,6 +1,6 @@
 <p align="center">
 
-  <img src="https://camo.githubusercontent.com/87d2f7858eb2f36b36097cf257faaa40d3146b708d0afb3ebca17f0f2f99ab11/68747470733a2f2f692e696d6775722e636f6d2f31744a76696f442e706e67" alt="TransRate2" width="1000">
+  <img src="https://i.imgur.com/AOE2t7v.png" alt="TransRate2" width="1000">
 
 </p>
 
