@@ -18,9 +18,14 @@
 
 https://github.com/blahah/transrate
 
-
-
-
-
 > [!CAUTION]
 > $\Huge\textcolor[RGB]{248, 82, 73}{\textsf{TransRate2 is currently under development}}$
+
+<h2>
+  <img src="https://i.imgur.com/3UA4xwp.png" width="20" align="top">
+  &ensp;
+  <a href="https://github.com/ericbretz/TransRate2/wiki">
+    TransRate2 Wiki
+  </a>
+</h2>
+
